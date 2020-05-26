@@ -45,6 +45,10 @@ import jdk.internal.vm.annotation.ReservedStackAccess;
  * {@code synchronized} methods and statements, but with extended
  * capabilities.
  *
+ * *1* Повторное взаимное исключение Лока с таким же базовым поведением и
+ * семаникой как у неявного монитор лока, доступного при использовании
+ * synchronized методов и выражений, но с расширенными возможностями
+ *
  * <p>A {@code ReentrantLock} is <em>owned</em> by the thread last
  * successfully locking, but not yet unlocking it. A thread invoking
  * {@code lock} will return, successfully acquiring the lock, when
@@ -52,6 +56,12 @@ import jdk.internal.vm.annotation.ReservedStackAccess;
  * immediately if the current thread already owns the lock. This can
  * be checked using methods {@link #isHeldByCurrentThread}, and {@link
  * #getHoldCount}.
+ *
+ * *2* ReentrantLock принадлежит потоку, который был последним успешно заблокировавшим,
+ * но еще не разблокировавшим. Поток вызвавший лок, вернет, успешно получивший лок,
+ * когда лок не принадлежит другому потоку. Метод вернет лок немедленно, если текущий поток
+ * уже владеет локом.
+ * Это может быть проверено используя методы isHeldByCurrentThread(), и .getHoldCount()
  *
  * <p>The constructor for this class accepts an optional
  * <em>fairness</em> parameter.  When set {@code true}, under
@@ -69,6 +79,8 @@ import jdk.internal.vm.annotation.ReservedStackAccess;
  * Also note that the untimed {@link #tryLock()} method does not
  * honor the fairness setting. It will succeed if the lock
  * is available even if other threads are waiting.
+ *
+ * *3*
  *
  * <p>It is recommended practice to <em>always</em> immediately
  * follow a call to {@code lock} with a {@code try} block, most

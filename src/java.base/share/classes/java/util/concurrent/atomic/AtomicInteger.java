@@ -49,6 +49,12 @@ import jdk.internal.misc.Unsafe;
  * this class does extend {@code Number} to allow uniform access by
  * tools and utilities that deal with numerically-based classes.
  *
+ * int значение, которое может быть обновлено автоматически. Смотрите описание VarHandle
+ * для описания свойств атомарных доступов. AtomicInteger используется в приложениях, таких как
+ * атомарнный инкрементный счет, и не может быть использован как замена для Integer.
+ * Однако этот класс расширяет Number, чтобы унифицировать доступ с помощью инструментов и утилит,
+ * которые работают с основанными на числах классами.
+ *
  * @since 1.5
  * @author Doug Lea
  */
