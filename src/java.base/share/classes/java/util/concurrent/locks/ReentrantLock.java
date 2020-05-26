@@ -45,7 +45,7 @@ import jdk.internal.vm.annotation.ReservedStackAccess;
  * {@code synchronized} methods and statements, but with extended
  * capabilities.
  *
- * *1* Повторное взаимное исключение Лока с таким же базовым поведением и
+ * <p>*1* Повторное взаимное исключение Лока с таким же базовым поведением и
  * семаникой как у неявного монитор лока, доступного при использовании
  * synchronized методов и выражений, но с расширенными возможностями
  *
@@ -57,7 +57,7 @@ import jdk.internal.vm.annotation.ReservedStackAccess;
  * be checked using methods {@link #isHeldByCurrentThread}, and {@link
  * #getHoldCount}.
  *
- * *2* ReentrantLock принадлежит потоку, который был последним успешно заблокировавшим,
+ * <p>*2* ReentrantLock принадлежит потоку, который был последним успешно заблокировавшим,
  * но еще не разблокировавшим. Поток вызвавший лок, вернет, успешно получивший лок,
  * когда лок не принадлежит другому потоку. Метод вернет лок немедленно, если текущий поток
  * уже владеет локом.
@@ -80,11 +80,23 @@ import jdk.internal.vm.annotation.ReservedStackAccess;
  * honor the fairness setting. It will succeed if the lock
  * is available even if other threads are waiting.
  *
- * *3*
+ * <p>*3* Конструктор для этого класса опциональный справедливый параметр.
+ * Когда он установлен true, при спорной ситуации, локи одалживают предоставление доступа
+ * наиболее ожидающему потоку. Однако этот лок не дает гарантий никакого
+ * особого предоставления доступа. Программы использующие честные локи, доступные многим
+ * потокам могут показать снижение общей производительности (т.е. замедлить, или часто сильно замедлить)
+ * чем при использовании настроек по умолчанию, но иметь меньше отклонений во время получения
+ * блокировок и гарантий отсутствия голода. Заметьте однако, что честные блокировки
+ * не гарантируют честность "планирования" потоков. Таким образом, один из многих потоков, использующих
+ * честную блокировку может получить ее множество раз подряд в то время как другие
+ * активные потоки не продвигаются и не не держат в настоящее время блокировку.
  *
  * <p>It is recommended practice to <em>always</em> immediately
  * follow a call to {@code lock} with a {@code try} block, most
  * typically in a before/after construction such as:
+ *
+ * <p>*4* Рекомендуется практика всегда немедленно следить за вызовом лока
+ * с блоком try, как правило в до/после конструкции как указано ниже:
  *
  * <pre> {@code
  * class X {
@@ -106,13 +118,24 @@ import jdk.internal.vm.annotation.ReservedStackAccess;
  * methods for inspecting the state of the lock.  Some of these
  * methods are only useful for instrumentation and monitoring.
  *
+ * <p>*5* В дополнение к реализации интерфейса Lock, этот класс определяет
+ * публичные и протектед методы для проверки состояния блокировки.
+ * Некоторые из этих методов полезны только для инструментариев и мониторинга.
+ *
  * <p>Serialization of this class behaves in the same way as built-in
  * locks: a deserialized lock is in the unlocked state, regardless of
  * its state when serialized.
  *
+ * <p>*6* Сериализация этого класса работает также как встроенные блокировки:
+ * десериализованный лок находится в разблокированном состоянии, не смотря на его
+ * состояние, когда он был сериализован.
+ *
  * <p>This lock supports a maximum of 2147483647 recursive locks by
  * the same thread. Attempts to exceed this limit result in
  * {@link Error} throws from locking methods.
+ *
+ * <p>*7* Этот лок поддерживает максимум 2147483647 рекурсивных блокировок одним и тем же потоком.
+ * Попытки превысить этот лимит приведет к Error выброшенному из блокирующих методов.
  *
  * @since 1.5
  * @author Doug Lea
